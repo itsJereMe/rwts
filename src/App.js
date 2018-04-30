@@ -15,7 +15,6 @@ class App extends Component {
 
   componentWillMount() {
     if (typeof this.props.match.params.question === 'undefined') {
-      // window.location.replace('http://server.schapie-online.nl:3000/q/1');
       this.setState({thisQuestion: 1});
     } else {
       this.setState({thisQuestion: this.props.match.params.question});
@@ -30,12 +29,16 @@ class App extends Component {
   }
 
   render() {
+    var env = process.env;
+    //db config
+    var api = env.API_URL;
+    
     return (
       <div className="App">
         <Header />
         <Question question={this.state.thisQuestion}/>
         <Answer 
-          url='http://server.schapie-online.nl:3001/api/comments'
+          api='http://server:3001/api/comments'
           pollInterval={2000}
           contester={this.state.playerName}
           question={this.state.thisQuestion}

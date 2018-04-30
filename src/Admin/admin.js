@@ -17,7 +17,7 @@ export default class Admin extends Component {
   constructor(props) {
   super(props)
     this.state = {
-      api: 'http://server.schapie-online.nl:3001/api/admin',
+      api: 'http://server:3001/api/admin',
       data: [],
       cquestion: 0,
       cplayer: ''
@@ -26,7 +26,7 @@ export default class Admin extends Component {
   };
 
   componentDidMount() {
-    axios.get('http://server.schapie-online.nl:3001/api/admin/all')
+    axios.get('http://server:3001/api/admin/all')
     .then(res => {
       this.setState({ data: res.data });
       // console.log(res.data)

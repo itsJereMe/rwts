@@ -24,7 +24,7 @@ export default class addQuestion extends Component {
   }
 
   componentDidMount() {
-    axios.get('http://server.schapie-online.nl:3001/api/admin/question')
+    axios.get('http://server:3001/api/admin/question')
     .then(res => {
       var questionsArr = res.data;
       var highestNr = 0;
@@ -60,7 +60,7 @@ export default class addQuestion extends Component {
       QuestionNr: questionNr,
       Question: question
     };
-    axios.post('http://server.schapie-online.nl:3001/api/admin/question', newQuestion)
+    axios.post('http://server:3001/api/admin/question', newQuestion)
     .then(res => {
       if (res.status === 200) {
         var newQuestionNr = Number(this.state.tempQuestionNr) + 1;
@@ -68,7 +68,7 @@ export default class addQuestion extends Component {
         document.getElementById("question").value = '';
         this.setState({tempQuestionNr: newQuestionNr});
         
-        axios.get('http://server.schapie-online.nl:3001/api/admin/question')
+        axios.get('http://server:3001/api/admin/question')
         .then(res => {
           this.setState({
             questions: res.data

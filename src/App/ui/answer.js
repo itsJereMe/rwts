@@ -45,7 +45,7 @@ export default class Answer extends Component {
         });
       }
     }
-    axios.get('http://server.schapie-online.nl:3001/api/admin/player')
+    axios.get('http://server:3001/api/admin/player')
     .then(res => {
       var i;
       var iLength = res.data.length;
@@ -95,7 +95,7 @@ export default class Answer extends Component {
           console.log('Antwoorden zijn succesvol verstuurd.');
           if (this.props.question <= 8) {
             var nextQuestion = Number(this.props.question) + 1;
-            window.location.replace('http://server.schapie-online.nl:3000/q/' + nextQuestion)
+            window.location.replace('http://server:3000/q/' + nextQuestion)
           } else {
             this.setState({ open2: true });
             this.resetGame.bind(this);

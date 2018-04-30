@@ -34,7 +34,7 @@ export default class Answers extends Component {
       loaded: false
     })
     if (nextProps.question >= 1) {
-      axios.get(`http://server.schapie-online.nl:3001/api/admin/qnr/${nextProps.question}`)
+      axios.get(`http://server:3001/api/admin/qnr/${nextProps.question}`)
       .then(res => {
         this.setState({
           questionText: res.data[0].question
@@ -52,7 +52,7 @@ export default class Answers extends Component {
         // console.log("Hi, I'm rollin...")
         var { question, player } = this.state;
         // console.log(question);
-        axios.get(`http://server.schapie-online.nl:3001/api/admin/${question}/${player}`)
+        axios.get(`http://server:3001/api/admin/${question}/${player}`)
         .then(res => {
           this.setState({ data: res.data, loaded: true });
           // console.log(res.data)

@@ -28,7 +28,7 @@ export default class addPlayer extends Component {
   }
 
   componentWillMount() {
-    axios.get('http://server.schapie-online.nl:3001/api/admin/player')
+    axios.get('http://server:3001/api/admin/player')
     .then(res => {
       this.setState({
         chipData: res.data
@@ -44,11 +44,11 @@ export default class addPlayer extends Component {
   }
 
   handleRequestDelete = (key) => {
-    axios.delete(`http://server.schapie-online.nl:3001/api/admin/player/${key}`)
+    axios.delete(`http://server:3001/api/admin/player/${key}`)
     .then(res => {
         console.log(res);
         if (res.status === 200) {
-          axios.get('http://server.schapie-online.nl:3001/api/admin/player')
+          axios.get('http://server:3001/api/admin/player')
           .then(res => {
             this.setState({
               chipData: res.data
@@ -67,12 +67,12 @@ export default class addPlayer extends Component {
 
   handleRequestAdd = (value) => {
     var newPlayer = {player: value};
-    axios.post('http://server.schapie-online.nl:3001/api/admin/player', newPlayer)
+    axios.post('http://server:3001/api/admin/player', newPlayer)
     .then(res => {
       // console.log(res);
       if (res.status === 200) {
         document.getElementById("player").value = '';
-        axios.get('http://server.schapie-online.nl:3001/api/admin/player')
+        axios.get('http://server:3001/api/admin/player')
         .then(res => {
           // console.log(res.data);
           this.setState({

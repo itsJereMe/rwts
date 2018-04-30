@@ -12,7 +12,7 @@ export default class Question extends Component {
 	};
 
 	componentDidMount() {
-        axios.get(`http://server.schapie-online.nl:3001/api/admin/${this.props.question}`)
+        axios.get(`http://server:3001/api/admin/${this.props.question}`)
             .then(res => {
                 this.setState({ data: res.data });
                 //console.log(res.data)
