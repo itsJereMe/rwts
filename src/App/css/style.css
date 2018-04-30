@@ -1,0 +1,257 @@
+body {
+  font-family: 'Dosis', sans-serif !important;
+}
+
+.App {
+  text-align: center;
+}
+
+.pad {
+  padding: 5px;
+}
+
+.setCenter {
+  align-items: center;
+  align-content: center;
+}
+
+.App-logo {
+  height: 150px;
+  padding: 20px;
+}
+
+.finished {
+  margin: auto;
+  width: 500px;
+  height: 100%;
+}
+
+img.finito {
+  top: 100px;
+  margin: auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.input-field.col label {
+  left: 0 !important;
+}
+
+.sidebar {
+  float: left;
+  width: 180px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  height: 100%;
+}
+
+.sidebar-questions {
+  float: left;
+  width: 250px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  height: 100%;
+}
+
+td, th {
+  font-size: 16px !important;
+}
+
+.full-width {
+  width: 100% !important;
+}
+
+.answers {
+  padding: 20px;
+  float: right;
+  width: calc(100% - 200px);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.question-answers {
+  padding: 20px;
+  float: right;
+  width: calc(100% - 270px);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.App-header {
+  text-align: left;
+  background-color: rgba(0, 128, 128, 0.8);
+  height: 150px;
+  padding-bottom: 20px;
+  color: white;
+}
+
+.Answer-header {
+  text-align: left;
+  background-color: rgba(0, 128, 128, 0.8);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  height: 206px;
+  padding-bottom: 20px;
+  color: white;
+  margin-bottom: 20px;
+}
+
+.Answer-header h1 {
+    padding: 40px 20px 20px 100px;
+    margin-top: 0;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+.list-group-item-heading {
+  margin-top: 0;
+  margin-bottom: 5px;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.collapsible-header {
+  font-size: 1.5rem;
+}
+
+.collapsible-body {
+  background-color: #fff;
+}
+
+.collapsible-header.active{
+  background-color: rgb(0, 128, 128) ;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 600;
+
+}
+
+.no-dots {
+  list-style: none;
+}
+
+.no-dots .collapsible-header {
+  background-color: rgba(0, 128, 128,0.3) !important;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.no-dots span.badge {
+  opacity: 0;
+}
+
+.left-ul {
+  float: left;
+  width: calc(48% - 10px);
+  border: 1px dashed rgba(0, 0, 0, 0.205) !important;
+}
+
+.right-ul {
+  float: right;
+  width: calc(48% - 10px);
+  border: 1px dashed rgba(0, 0, 0, 0.205) !important;
+}
+
+.fs16 {
+  font-size: 16px !important;
+}
+
+.page-footer.footer-fixed {
+  background-color: rgba(0, 128, 128, 0.205);
+  position: fixed;
+  bottom: 0;
+  height: 90px;
+  width: 100%;
+}
+
+.answer {
+  padding-bottom: 100px;
+  max-width: 95%;
+  margin: auto;
+}
+
+.right-mrg {
+  margin-right: 10px;
+}
+
+.font-xl {
+  font-size: 3.2rem !important;
+}
+
+.preloader-wrapper.small {
+  top: 9px;
+}
+
+/* label color */
+.input-field label {
+  color: #607d8b !important;
+}
+/* label focus color */
+.input-field input[type=text]:focus + label {
+  color: #607d8b !important;
+}
+/* label underline focus color */
+.input-field input[type=text]:focus {
+  border-bottom: 1px solid rgb(0, 128, 128) !important;
+  box-shadow: 0 0 0 0 rgb(0, 128, 128) !important;
+}
+
+.circle-clipper {
+  border-color: #fff;
+}
+
+.btn-large i {
+  font-size: 3.0rem;
+  font-weight: 700;
+}
+
+span.badge {
+  background-color: transparent;
+  border-radius: 5px;
+}
+
+.collapsible-header.active span.badge {
+  color: #fff;
+}
+
+.se-pre-con {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	background: url('/img/loader.gif') center/96px 96px no-repeat rgba(255,255,255,0.5) !important;
+}
+
+.hider {
+	position: fixed;
+	left: 0px;
+	top: 0px;
+	width: 100%;
+	height: 150%;
+	z-index: 1300;
+	background-color: #fff;
+}
+
+.halfsize {
+  width: 50%;
+  text-align: center;
+  margin: auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .halfsize {
+    width: 80%;
+    text-align: center;
+    margin: auto;
+  }
+  input#playerName {
+    font-size: 16px;  
+  }
+  
+  .finished {
+    margin: auto;
+    max-width: 500px;
+    max-height: 500px;
+  }
+}
