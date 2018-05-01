@@ -24,7 +24,7 @@ MDB_PASS='pass'
 MDB_DBASE='databasename'
 ```
 4.  Or change line 27 of ```server.js``` to connect to a different db
-```
+```javascript
 mongoose.connect('mongodb://' + user + ':' + pass + '@ds143532.mlab.com:43532/' + database);
 ```
 5.  Replace ```http://server:3001/api``` to e.g. ```http://localhost:3001/api``` in all the necessary files, to be able to access the api (server.js)
