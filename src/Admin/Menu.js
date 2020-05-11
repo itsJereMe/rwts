@@ -11,24 +11,24 @@ export default class Menu extends Component {
           <ToolbarGroup>
             <RaisedButton
               primary={true}
-              href='/WJLmvKnc'
-              label='Bekijk de antwoorden'
+              href='/beheer'
+              label='Antwoorden'
             />
             <RaisedButton
               primary={true}
-              href='/WJLmvKnc/add/players'
-              label='Voeg spelers toe'
-            />
-            <RaisedButton
-              primary={true}
-              href='/WJLmvKnc/add/questions'
-              label='Voeg vragen toe'
+              href='/beheer/results'
+              label='Uitslag'
             />
             <ToolbarSeparator />
             <RaisedButton
               primary={true}
-              href='/WJLmvKnc/results'
-              label='Uitslag'
+              href='/beheer/add/players'
+              label='Sterren'
+            />
+            <RaisedButton
+              primary={true}
+              href='/beheer/add/questions'
+              label='Vragen'
             />
           </ToolbarGroup>
         </Toolbar>  

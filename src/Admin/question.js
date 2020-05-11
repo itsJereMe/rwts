@@ -12,18 +12,17 @@ export default class Question extends Component {
 	};
 
 	componentDidMount() {
-        axios.get(`http://server:3001/api/admin/${this.props.question}`)
+        axios.get(`${process.env.REACT_APP_API_URL}/admin/${this.props.question}`)
             .then(res => {
                 this.setState({ data: res.data });
-                //console.log(res.data)
             })
             .catch(err => {
                 console.error(err);
             });
     }
 
-    showAnswer(question, player) {
-        this.props.onPlayerClick(question, player);
+    showAnswer(question, player, playerId) {
+        this.props.onPlayerClick(question, player, playerId);
         // console.log(question + ' - ' + player);
     }
 
@@ -43,9 +42,9 @@ export default class Question extends Component {
                 {data.map((value, index) => (
                     <ListItem
                         key={'q'+index}
-                        primaryText={value.player}
+                        primaryText={value.user ? (value.user.length ? value.user[0].name : "Onbekende") : "Onbekend"}
                         leftIcon={<i className="small material-icons right">person</i>}
-                        onClick={this.showAnswer.bind(this, qst, value._id)}
+                        onClick={this.showAnswer.bind(this, qst, value._id, value.playerId)}
                     />
                 ))}
             </List>

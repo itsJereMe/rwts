@@ -21,46 +21,41 @@ export default class Answers extends Component {
     this.state = {
        data: {},
        player: '',
+       playerId: '',
        question: 0,
-       questionText: '',
-       loaded: false
+       questionText: ''
     };
   };
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      player: nextProps.player,
-      question: nextProps.question,
-      loaded: false
-    })
-    if (nextProps.question >= 1) {
-      axios.get(`http://server:3001/api/admin/qnr/${nextProps.question}`)
-      .then(res => {
-        this.setState({
-          questionText: res.data[0].question
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.question !== prevState.question || nextProps.playerId !== prevState.playerId) {
+      return {
+        question:nextProps.question,
+        player:nextProps.player,
+        playerId:nextProps.playerId
+      };
     }
+    return null;
   }
 
-  componentDidUpdate() {
-    if (this.state.question > 0) {
-      if (!this.state.loaded) {
-        // console.log("Hi, I'm rollin...")
-        var { question, player } = this.state;
-        // console.log(question);
-        axios.get(`http://server:3001/api/admin/${question}/${player}`)
-        .then(res => {
-          this.setState({ data: res.data, loaded: true });
-          // console.log(res.data)
-        })
-        .catch(err => {
-          console.error(err);
-        });
-      }
+  componentDidUpdate(prevProps, prevState) {
+    console.log("update answer.js triggered");
+    if (prevState.question !== this.state.question || prevState.playerId !== this.state.playerId) {
+      if (this.state.question > 0) {
+          var { question, playerId } = this.state;
+          axios.get(`${process.env.REACT_APP_API_URL}/admin/question/${question}`)
+          .then(res => {
+            this.setState({questionText: res.data[0].question});
+            return axios.get(`${process.env.REACT_APP_API_URL}/admin/${question}/${playerId}`);
+          })
+          .then(res => {
+            this.setState({ data: res.data});
+             console.log("update", res.data)
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        }
     }
   }
 
@@ -69,13 +64,14 @@ export default class Answers extends Component {
   
   render() {
     var { data } = this.state;
+    console.log("render: ", data);
     return (
       <div>
         {data.length > 0 
         ?
           <div>
             <h2>Vraag {data[0].question}: {this.state.questionText} </h2>
-            <h4>De antwoorden van {data[0].player} hierop zijn:</h4>
+            <h4>De antwoorden van {data[0].user[0].name} hierop zijn:</h4>
             <Table>
               <TableHeader displaySelectAll={false} adjustForCheckbox={false}>
                 <TableRow>

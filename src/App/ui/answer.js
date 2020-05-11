@@ -1,18 +1,22 @@
 // import React dependecies
 import React, { Component } from 'react';
 
+
 // import style
 import '../css/style.css';
 
 // import required tools
 import { arrayMove } from 'react-sortable-hoc';
 import axios from 'axios';
+import { withRouter } from 'react-router-dom';
 
 // import Sortable list
 import SortableList from './Sortable/List';
 
 import { Input } from 'react-materialize';
 import Dialog from 'material-ui/Dialog';
+import Snackbar from 'material-ui/Snackbar';
+import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 
 // import Loader
@@ -20,21 +24,26 @@ import Loader from './loader';
 import Hider from './hider';
 
 // create and export the app itself with the previously created components
-export default class Answer extends Component {
+class Answer extends Component {
   // set the default states
   state = {
     question: [],
     players: [],
     loading: false,
     playerName: '',
+    playerId: '',
     open: false,
     open2: false,
-    ButtonDisabled: true
+    openDialog: false,
+    ButtonDisabled: true,
+    savedComment: [],
+    questionCount: 0
   };
 
   componentWillMount() {
     if (this.state.playerName === '') {
       var localPlayer = localStorage.getItem('playerName');
+      var localPlayerId = localStorage.getItem('playerId');
       if (typeof localPlayer === 'undefined' || localPlayer === null) {
         this.setState({
           open: true
@@ -42,40 +51,28 @@ export default class Answer extends Component {
       } else {
         this.setState({
           playerName: localPlayer,
+          playerId: localPlayerId
         });
       }
     }
-    axios.get('http://server:3001/api/admin/player')
-    .then(res => {
-      var i;
-      var iLength = res.data.length;
-      for (i = 0; i < iLength; i++) {
-        var newPoints;
-        newPoints = iLength - i;
-        var tempPlayers = res.data;
-        tempPlayers[i].points = newPoints;
-  
-        this.setState({
-          players: tempPlayers,
-        });
-      }
-  
-    })
-    .catch(err => {
-      console.log(err);
-    });
 
+
+  }
+
+  lockGame() {
+    localStorage.setItem('finished', 'true');
+    console.log("local",localStorage.getItem("playerName"));
   }
 
   resetGame() {
     localStorage.clear();
-    localStorage.setItem('finished', 'true');
-    this.setState({playerName: ''})
+    this.setState({playerId: '', open:true, open2:false});
+    window.location.href = '/q/1';
   }
   
   // test handler for the button
   changeState = () => {
-    if (this.props.question <= 8) {
+    if (this.props.question < this.state.questionCount) {
       this.setState({
         loading: !this.state.loading
       });
@@ -85,27 +82,52 @@ export default class Answer extends Component {
     //add POST request
     var answer = {
       player: this.state.playerName,
+      playerId: this.state.playerId,
       answers: this.state.players,
       question: this.props.question
     }
-    axios.post(this.props.url, answer)
-    .then(res => {
-        // console.log(res);
-        if (res.status === 200) {
-          console.log('Antwoorden zijn succesvol verstuurd.');
-          if (this.props.question <= 8) {
-            var nextQuestion = Number(this.props.question) + 1;
-            window.location.replace('http://server:3000/q/' + nextQuestion)
-          } else {
-            this.setState({ open2: true });
-            this.resetGame.bind(this);
-          }
-        }
-    })
-    .catch(err => {
-        console.error(err);
-    });
+  console.log("post", this);
+  
+    if(this.state.savedComment.length>0) {
+      axios.put(process.env.REACT_APP_API_URL+"/comments/"+this.state.savedComment[0]._id, answer)
+      .then(res => {
+          // console.log(res);
+          this.afterSave(res);
+      })
+      .catch(err => {
+        alert("Antwoord bewerken is niet gelukt. Pagina wordt ververst."+err);
+          console.error(err);
+          window.location.reload();
+      });
+    } else {
+      axios.post(this.props.api, answer)
+      .then(res => {
+          // console.log(res);
+          this.afterSave(res);
+      })
+      .catch(err => {
+        alert("Actie is niet gelukt. Pagina wordt ververst.");
+          console.error(err);
+          window.location.reload();
+      });
 
+    }
+  }
+
+  afterSave(res) {
+    if (res.status === 200) {
+      console.log('Antwoorden zijn succesvol verstuurd.');
+      if (this.props.question < this.state.questionCount) {
+        var nextQuestion = Number(this.props.question) + 1;
+        this.props.history.push('/q/' + nextQuestion);
+      } else {
+        this.lockGame();
+        this.setState({ open2: true });
+        console.log("Klaar");
+      }
+    } else {
+      alert("Actie is niet gelukt.");
+    }
   }
 
   // update the position state of the players after changing the order
@@ -149,16 +171,90 @@ export default class Answer extends Component {
       })
     }
 
+    this.fetchData();
+
+    axios.get(process.env.REACT_APP_API_URL+'/admin/question')
+    .then(res => {
+      this.setState({
+        questionCount: res.data.length
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.open2) {return;}
+    
+    if (prevState.savedComment !== this.state.savedComment) {
+      if(this.state.savedComment.length > 0) {
+        this.setState({
+          players: this.state.savedComment[0].answers,
+          openDialog: true
+        });
+      }
+    }
+    if(prevProps.question !== this.props.question) {
+      this.fetchData();
+    }
+    if(prevState.playerId !== this.state.playerId) {
+      this.fetchData();
+    }
+
+  }
+
+  fetchData() {
+    axios.get(process.env.REACT_APP_API_URL+'/admin/star')
+    .then(res => {
+      var i;
+      var iLength = res.data.length;
+      for (i = 0; i < iLength; i++) {
+        var newPoints;
+        newPoints = iLength - i;
+        var tempPlayers = res.data;
+        tempPlayers[i].points = newPoints;
+  
+        this.setState({
+          players: tempPlayers,
+          loading:false
+        });
+      }
+  
+      return axios.get(process.env.REACT_APP_API_URL+'/admin/'+this.props.question+'/'+this.state.playerId);
+    })
+    .then(res => {
+      if(this.state.playerId) {
+        this.setState({
+          savedComment: res.data
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
 
   handleClose() {
     var username = document.getElementById("playerName").value;
-    localStorage.setItem('playerName', username);
-    localStorage.setItem('finished', 'false');
-    this.setState({
-      playerName: username,
-      open: false
+      
+    axios.post(process.env.REACT_APP_API_URL+'/users',{name: username})
+    .then(res => {
+      var userId = res.data.data._id;
+      localStorage.setItem('playerName', username);
+      localStorage.setItem('playerId', userId);
+      localStorage.setItem('finished', 'false');
+      this.setState({
+        playerName: username,
+        playerId: userId,
+        open: false
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      alert("Aanmelden is niet gelukt. Dit is niet jouw fout.")
     });
+
   }
 
   checkName(e) {
@@ -182,6 +278,18 @@ export default class Answer extends Component {
       players,
     });
   }
+
+  handleSnackbarActionClick= () => {
+    this.setState({
+      openDialog:false
+    })
+  }
+
+  handleSnackbarRequestClose = () => {
+    this.setState({
+      openDialog:false
+    })
+  }
   
   // render the answer page
   render() {
@@ -194,24 +302,37 @@ export default class Answer extends Component {
       />,
     ];
 
+    const finishedActions = [
+      <FlatButton
+        label="Opnieuw invullen"
+        primary={false}
+        keyboardFocused={true}
+        onClick={this.resetGame.bind(this)}
+      />,
+    ];
+
     return (
       <div>
         <div className="answer">
           {this.state.loading ? <Loader /> : null}
           {this.state.open || this.state.open2 ? <Hider /> : null}
           Zet in de juiste volgorde:
+          <Snackbar open={this.state.openDialog} action={"Sluit"} onActionClick={this.handleSnackbarActionClick} onRequestClose={this.handleSnackbarRequestClose} autoHideDuration={8000} message={"Je hebt deze vraag al gehad. Je kunt 'm nog wel bewerken."}></Snackbar>
           <Dialog
-            title={<h3>Bedankt voor het invullen</h3>}
+            title={<h3>Bedankt voor het invullen!</h3>}
             contentStyle={{textAlign: "center"}}
             titleStyle={{textAlign: "center"}}
             modal={true}
             open={this.state.open2}
+            actions={finishedActions}
           >
             <div className="setCenter">
               <img src="../../img/checkmark.gif" alt=''/>
             </div>
+            Bekijk de livestream voor de uitslag.<br/>
+            Je kunt deze pagina sluiten.
           </Dialog>
-          <SortableList axis="y" lockAxis="y" helperClass="no-dots" hideSortableGhost={true} pressDelay={200} transitionDuration={450} players={this.state.players} onSortEnd={this.onSortEnd} handleTextChange={this.handleTextChange.bind(this)}/>
+          <SortableList axis="y" lockAxis="y" helperClass="no-dots" hideSortableGhost={true} pressDelay={150} transitionDuration={250} players={this.state.players} onSortEnd={this.onSortEnd} handleTextChange={this.handleTextChange.bind(this)}/>
           <Dialog
             title="Wie ben je?"
             actions={actions}
@@ -241,3 +362,5 @@ export default class Answer extends Component {
     )
   }
 };
+
+export default withRouter(Answer);

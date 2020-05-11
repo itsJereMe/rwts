@@ -6,6 +6,8 @@ import Admin from './Admin/admin';
 import addQuestion from './Admin/Questions';
 import addPlayer from './Admin/Players';
 import Result from './Admin/results';
+import PresenterQuestions from './Presenter/questions';
+import PresenterAnswers from './Presenter/answers';
 import Finish from './Finish';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
@@ -24,10 +26,16 @@ ReactDOM.render(
     <MuiThemeProvider>
         <Router>
             <Switch>
-                <Route path="/WJLmvKnc/add/questions" component={addQuestion} />
-                <Route path="/WJLmvKnc/add/players" component={addPlayer} />
-                <Route path="/WJLmvKnc/results" component={Result} />
-                <Route path="/WJLmvKnc" component={Admin} />
+                <Route path="/beheer/add/questions" component={addQuestion} />
+                <Route path="/beheer/add/players" component={addPlayer} />
+                <Route path="/beheer/results" component={Result} />
+                <Route path="/beheer" component={Admin} />
+                <Route path="/view">
+                    <div style={{backgroundImage:"url(/img/smallbg.png)", backgroundSize:"cover", backgroundPosition:"50% 50%", width:"100vw", height:"100vh", overflow:"auto", padding:"5px 10%"}}>
+                        <Route path="/view/question/:question/player/:player" component={PresenterAnswers} />
+                        <Route exact path="/view" component={PresenterQuestions} />
+                    </div>
+                </Route>
                 <Route path="/q/:question" component={App} />
                 <Route path="/finished" component={Finish} />
                 <Route path="/" component={App} />

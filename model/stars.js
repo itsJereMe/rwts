@@ -7,11 +7,8 @@ var Schema = mongoose.Schema;
 
 //create new instance of the mongoose.schema. the schema takes an 
 //object that shows the shape of your database entries.
-var CommentsSchema = new Schema({
-    playerId: mongoose.Types.ObjectId,
-    question: Number,
-    answers: Object,
-}, {collection: 'rwts'});
+var StarSchema = new Schema({
+  player: String
+}, {collection: 'stars'});
 
-//export our module to use in server.js
-module.exports = mongoose.model('Comment', CommentsSchema);
+module.exports = mongoose.model('Stars', StarSchema);

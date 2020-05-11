@@ -20,7 +20,7 @@ export default class CommentInput extends Component {
     // render the component
     render () {
         return (
-        <Input s={12} className="input-field fs16" label="Licht je keuze toe" value={this.props.comment} onChange={this.handleChange}/>
+        <Input s={12} className="input-field fs16" label="Licht je keuze toe" value={this.props.comment ? this.props.comment : ""} onChange={this.handleChange}/>
         )
     }
 }

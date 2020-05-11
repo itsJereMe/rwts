@@ -28,7 +28,7 @@ export default class addPlayer extends Component {
   }
 
   componentWillMount() {
-    axios.get('http://server:3001/api/admin/player')
+    axios.get(process.env.REACT_APP_API_URL+'/admin/star')
     .then(res => {
       this.setState({
         chipData: res.data
@@ -44,11 +44,11 @@ export default class addPlayer extends Component {
   }
 
   handleRequestDelete = (key) => {
-    axios.delete(`http://server:3001/api/admin/player/${key}`)
+    axios.delete(`${process.env.REACT_APP_API_URL}/admin/star/${key}`)
     .then(res => {
         console.log(res);
         if (res.status === 200) {
-          axios.get('http://server:3001/api/admin/player')
+          axios.get(process.env.REACT_APP_API_URL+'/admin/star')
           .then(res => {
             this.setState({
               chipData: res.data
@@ -67,12 +67,12 @@ export default class addPlayer extends Component {
 
   handleRequestAdd = (value) => {
     var newPlayer = {player: value};
-    axios.post('http://server:3001/api/admin/player', newPlayer)
+    axios.post(process.env.REACT_APP_API_URL+'/admin/star', newPlayer)
     .then(res => {
       // console.log(res);
       if (res.status === 200) {
-        document.getElementById("player").value = '';
-        axios.get('http://server:3001/api/admin/player')
+        document.getElementById("starname").value = '';
+        axios.get(process.env.REACT_APP_API_URL+'/admin/star')
         .then(res => {
           // console.log(res.data);
           this.setState({
@@ -125,7 +125,7 @@ export default class addPlayer extends Component {
             </div>
             <h4>Voeg een speler toe:</h4>
             <br />
-            <Input s={12} className="input-field fs16" label="Naam van de speler" id="player" value={this.props.comment} onChange={this.handleChange.bind(this)}/>
+            <Input s={12} className="input-field fs16" label="Naam van de speler" id="starname" value={this.props.comment} onChange={this.handleChange.bind(this)}/>
             <RaisedButton 
               label="Opslaan"
               primary={true}

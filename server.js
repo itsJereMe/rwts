@@ -1,6 +1,6 @@
 'use strict'
 
-// require('dotenv').config();
+ require('dotenv').config();
 
 //first we import our dependencies…
 var express = require('express');
@@ -8,7 +8,8 @@ var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var Comment = require('./model/comments');
 var Questions = require('./model/questions');
-var Players = require('./model/players');
+var Stars = require('./model/stars');
+var Users = require('./model/users');
 
 //and create our instances
 var app = express();
@@ -16,15 +17,15 @@ var router = express.Router();
 
 //set our port to either a predetermined port number if you have set 
 //it up, or 3001
-var port = process.env.API_PORT || 3001;
+var port = process.env.API_PORT || 81;
 
 var env = process.env;
 //db config
 var user = env.MDB_USER;
 var pass = env.MDB_PASS;
 var database = env.MDB_DBASE;
-// console.log(user);
-mongoose.connect('mongodb://' + user + ':' + pass + '@ds143532.mlab.com:43532/' + database);
+//console.log(user);
+mongoose.connect('mongodb+srv://' + user + ':' + pass + '@cloudcluster-bs39f.azure.mongodb.net/' + database + '?retryWrites=true&w=majority',{ useNewUrlParser: true, useUnifiedTopology: true});
 
 //now we should configure the API to use bodyParser and look for 
 //JSON data in the request body
@@ -50,42 +51,52 @@ router.get('/', function(req, res) {
 });
 
 //adding the /comments route to our /api router
-router.route('/admin/player')
+router.route('/admin/star')
     .get(function(req, res) {
 
       //looks at our Comment Schema
-      Players.find(function(err, players) {
+      Stars.find(function(err, stars) {
           if (err)
           res.send(err);
           
           //responds with a json object of our database comments.
-          res.json(players)
+          res.json(stars)
       });
     })
 
     //post new comment to the database
     .post(function(req, res) {
-      var player = new Players();
+      var player = new Stars();
       player.player = req.body.player;
-      player.comment = '';
-      player.points = 0;
       // console.log(comment);
       player.save(function(err) {
           if (err) 
           res.send(err);
 
-          res.json({ message: 'Player successfully added!' });
+          res.json({ message: 'Star successfully added!' });
       });
     });
 
-router.route('/admin/player/:id')
+router.route('/admin/star/:id')
     .delete(function(req, res) {
-      Players.remove({_id: req.params.id}, function(err) {
+      Stars.remove({_id: req.params.id}, function(err) {
         if (err)
         res.send(err);
 
-        res.json({ message: 'Player deleted!' });
+        res.json({ message: 'Star deleted!' });
 
+      });
+    });
+
+
+router.route('/admin/comment')
+    .delete(function(req, res) {
+      Comment.deleteMany({}).exec(function(err, comment) {
+        if (err)
+        res.send(err);
+        
+        //responds with a json object of our database comments.
+        res.json({Message:"Comments emptied"})
       });
     });
 
@@ -120,7 +131,7 @@ router.route('/admin/question')
         });
     });
 
-router.route('/admin/qnr/:questionNr')
+router.route('/admin/question/:questionNr')
     .get(function(req, res) {
       Questions.find({questionNr: req.params.questionNr}, function(err, question) {
         if (err)
@@ -137,7 +148,15 @@ router.route('/admin/all')
     .get(function(req, res) {
 
         //looks at our Comment Schema
-        Comment.find(function(err, comments) {
+        Comment.aggregate([
+            {
+            $lookup: {
+                from: "users", // collection name in db
+                localField: "playerId",
+                foreignField: "_id",
+                as: "user"
+            }
+        }]).exec(function(err, comments) {
             if (err)
             res.send(err);
             
@@ -149,14 +168,23 @@ router.route('/admin/all')
 router.route('/admin/:question')
     //retrieve all comments from the database
     .get(function(req, res) {
-
+//
         //looks at our Comment Schema
-        Comment.find({question: req.params.question},function(err, comments) {
+        Comment.aggregate([
+            {$match: {question: Number(req.params.question)}},
+            {
+            $lookup: {
+                from: "users", // collection name in db
+                localField: "playerId",
+                foreignField: "_id",
+                as: "user"
+            }
+        }]).exec(function(err, comments) {
             if (err)
             res.send(err);
             
             //responds with a json object of our database comments.
-            res.json(comments)
+            res.json(comments);
         });
     })
 
@@ -181,10 +209,17 @@ router.route('/admin/:questions/:id')
     .get(function(req, res) {
 
         //looks at our Comment Schema
-        var query = Comment.find({});
-        query.where('question').equals(req.params.questions);
-        query.where('_id').equals(req.params.id);
-        query.exec(function(err, comments) {
+        Comment.aggregate([
+            {$match: {question: Number(req.params.questions)}},
+            {$match: {playerId: new mongoose.Types.ObjectId(req.params.id)}},
+            {
+            $lookup: {
+                from: "users", // collection name in db
+                localField: "playerId",
+                foreignField: "_id",
+                as: "user"
+            }
+        }]).exec(function(err, comments) {
             if (err)
             res.send(err);
             
@@ -193,6 +228,22 @@ router.route('/admin/:questions/:id')
         });
     });
 
+
+router.route('/users') 
+    //post new comment to the database
+    .post(function(req, res) {
+        var user = new Users();
+
+        // body parser lets us use the req.body
+        user.name = req.body.name;
+        // console.log(comment);
+        user.save(function(err, result) {
+            if (err) 
+            res.send(err);
+
+            res.json({ message: 'Question successfully added!', data: result });
+        });
+    });
 
 //adding the /comments route to our /api router
 router.route('/comments')
@@ -211,22 +262,19 @@ router.route('/comments')
     })
     
     //post new comment to the database
-    .post(function(req, res) {
+    .post(function(req, res, next) {
         var comment = new Comment();
-        var questionNr = req.body.question;
-        var cplayer = req.body.player;
         // console.log(req);
         // body parser lets us use the req.body
-        comment.player = req.body.player;
+        comment.playerId = req.body.playerId;
         comment.answers = req.body.answers;
         comment.question = req.body.question;
         // console.log(comment);
-        comment.save(function(err) {
-            if (err) 
-            res.send(err);
-
+        comment.save().then(product => {
             res.json({ message: 'Comment successfully added!' });
-        });
+         }).catch(err => {
+            next(err);
+         });
     });
 
 //Adding a route to a specific comment based on the database ID
@@ -240,8 +288,8 @@ router.route('/comments/:comment_id')
 
             //setting the new author and text to whatever was changed. If 
             //nothing was changed we will not alter the field.
-            (req.body.author) ? comment.author = req.body.author : null;
-            (req.body.text) ? comment.text = req.body.text : null;
+            (req.body.answers) ? comment.answers = req.body.answers : null;
+            (req.body.player) ? comment.player = req.body.player : null;
 
             //save comment
             comment.save(function(err) {
@@ -261,7 +309,6 @@ router.route('/comments/:comment_id')
             res.json({ message: 'Comment has been deleted' })
         })
     });
-
 
 //Use our router configuration when we call /api
 app.use('/api', router);

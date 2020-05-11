@@ -17,16 +17,17 @@ export default class Admin extends Component {
   constructor(props) {
   super(props)
     this.state = {
-      api: 'http://server:3001/api/admin',
+      api: process.env.REACT_APP_API_URL+'/admin',
       data: [],
       cquestion: 0,
-      cplayer: ''
+      cplayer: '',
+      cplayerId: ''
     };
     this.countItems = this.countItems.bind(this);
   };
 
   componentDidMount() {
-    axios.get('http://server:3001/api/admin/all')
+    axios.get(process.env.REACT_APP_API_URL+'/admin/all')
     .then(res => {
       this.setState({ data: res.data });
       // console.log(res.data)
@@ -45,17 +46,18 @@ export default class Admin extends Component {
     return counts;
   }
 
-  PlayerClick(question, player) {
+  PlayerClick(question, player, playerId) {
     this.setState({
       cquestion: question,
-      cplayer: player
+      cplayer: player,
+      cplayerId: playerId
     })
     // console.log(question, player);
   }
 
   render() {
     const lItems = [];
-    var { cquestion, cplayer } = this.state;
+    var { cquestion, cplayer, cplayerId } = this.state;
     for (let i = 1; i <= 9; i++) {
       lItems.push(
         <div key={i}>
@@ -88,7 +90,7 @@ export default class Admin extends Component {
             </List>
           </div>
           <div className="answers">
-            <Answers question={cquestion} player={cplayer}/>
+            <Answers question={cquestion} player={cplayer} playerId={cplayerId}/>
           </div>
         </div>
       </div>

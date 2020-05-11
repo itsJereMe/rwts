@@ -11,9 +11,9 @@
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Import materialize.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js" async></script>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js" async></script>
-    <title>Ranking the little stars...</title>
+    <title>Ranking the Stars</title>
   </head>
   <body>
     <noscript>
@@ -28,7 +28,7 @@
           throw new Error("window is undefined");
         }
 
-          var _hash = "!";
+/*           var _hash = "!";
           var noBackPlease = function () {
               global.location.href += "#";
 
@@ -44,14 +44,14 @@
               if (global.location.hash !== _hash) {
                   global.location.hash = _hash;
               }
-          };
+          }; */
 
           global.onload = function () {
               
-          noBackPlease();
+          //noBackPlease();
 
           // disables backspace on page except on input fields and textarea..
-          document.body.onkeydown = function (e) {
+/*           document.body.onkeydown = function (e) {
                   var elm = e.target.nodeName.toLowerCase();
                   if (e.which === 8 && (elm !== 'input' && elm  !== 'textarea')) {
                       e.preventDefault();
@@ -59,8 +59,8 @@
                   // stopping event bubbling up the DOM tree..
                   e.stopPropagation();
               };
-          
-          };
+          */
+          }; 
 
         })(window);
     </script>

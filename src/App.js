@@ -13,32 +13,30 @@ class App extends Component {
     thisQuestion: 1
   }
 
-  componentWillMount() {
-    if (typeof this.props.match.params.question === 'undefined') {
-      this.setState({thisQuestion: 1});
-    } else {
-      this.setState({thisQuestion: this.props.match.params.question});
-    }
-  }
 
-  setPlayer(player) {
-    this.setState({
-      playerName: player,
-      isPlayer: true
-    });
-  }
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (
+      !prevState ||
+      prevState.thisQuestion !== nextProps.match.params.question
+    ) {
+      if (typeof nextProps.match.params.question === 'undefined') {
+        return {thisQuestion:1};
+      } else {
+        return {
+          thisQuestion: nextProps.match.params.question
+        };
+      }
+    }
+}
 
   render() {
-    var env = process.env;
-    //db config
-    var api = env.API_URL;
-    
+     
     return (
       <div className="App">
         <Header />
         <Question question={this.state.thisQuestion}/>
         <Answer 
-          api='http://server:3001/api/comments'
+          api={process.env.REACT_APP_API_URL+'/comments'}
           pollInterval={2000}
           contester={this.state.playerName}
           question={this.state.thisQuestion}

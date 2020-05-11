@@ -38,7 +38,7 @@ export default class Result extends Component {
         // console.log("Hi, I'm rollin...")
         var { question } = this.state;
         // console.log(question);
-        axios.get(`http://server:3001/api/admin/results/${question}`)
+        axios.get(`${process.env.REACT_APP_API_URL}/admin/results/${question}`)
         .then(res => {
           this.setState({ data: res.data, loaded: true });
           // console.log(res.data)

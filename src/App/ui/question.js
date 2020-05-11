@@ -10,7 +10,17 @@ export default class Question extends Component {
   }
 
   componentDidMount() {
-    axios.get(`http://server:3001/api/admin/qnr/${this.props.question}`)
+    this.fetchData();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps.question !== this.props.question) {
+      this.fetchData();
+    }
+  }
+
+  fetchData() {
+    axios.get(`${process.env.REACT_APP_API_URL}/admin/question/${this.props.question}`)
     .then(res => {
       this.setState({
         questionData: res.data
@@ -19,7 +29,6 @@ export default class Question extends Component {
     .catch(err => {
       console.log(err);
     });
-
   }
 
   render() {

@@ -11,7 +11,7 @@ export default class NewPlayer extends Component {
     
     saveName(e) {
         this.setState({
-            player: e.target.value
+            player: e.target.value,
         });
     }
     
