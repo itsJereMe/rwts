@@ -72,8 +72,12 @@ export default class PresenterQuestions extends Component {
       cquestion: question,
       cplayer: player
     });
-    this.props.history.push('/view/question/'+question);
+    //this.props.history.push('/view/question/'+question);
     // console.log(question, player);
+  }
+
+  AnswerClick(question, player) {
+    this.props.history.push('/view/question/'+question+'/player/'+player);
   }
 
   render() {
@@ -85,30 +89,30 @@ export default class PresenterQuestions extends Component {
       lItems.push(
         <div key={questions[nr].questionNr}>
           <ListItem
-            class="questions-list"
+            className="questions-list"
             primaryText={`Vraag ${questions[nr].questionNr}`}
             key={`0.${questions[nr].questionNr}`}
             initiallyOpen={false}
             primaryTogglesNestedList={true}
             onClick={() => this.PlayerClick(questions[nr].questionNr, "")}
-            nestedItems={[ this.state.answerData[questions[nr].questionNr] ? (
+            nestedItems={ this.state.answerData[questions[nr].questionNr] ? (
               this.state.answerData[questions[nr].questionNr].map((value, index) => (
-                  <Link to={{pathname: `/view/question/${questions[nr].questionNr}/player/${value.playerId}`, state: { question: questions[nr].questionNr }}}>
                   <ListItem
-                      class="questions-list-item"
+                      className="questions-list-item"
                       key={'q'+index}
+                      onClick={() => this.AnswerClick(questions[nr].questionNr, value.playerId)}
                       primaryText={value.user ? (value.user.length ? value.user[0].name : "Onbekende") : "Onbekend"}
                       leftIcon={<i className="small material-icons right">person</i>}
-                  /></Link>
+                  />
               ))
-            ) : (<ListItem class="questions-list-item" key="0" primaryText="Nog niemand"></ListItem>)]}
+              ) : ([<ListItem className="questions-list-item" key="q0" primaryText="Nog niemand"/>])}
           />
         </div>
       );
     }
   
     return (
-      <div class="vertical-flex">
+      <div className="vertical-flex">
         {stateMachine <= 0 ? (
           <div className="view-questions">
             <List>

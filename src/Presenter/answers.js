@@ -40,7 +40,8 @@ export default class Answers extends Component {
         question: +nextProps.match.params.question,
         firstLoad:true
       };
-    }
+    } else 
+    return null;
 }
 
   componentDidUpdate(prevProps, prevState) {
@@ -83,16 +84,16 @@ export default class Answers extends Component {
     var { data } = this.state;
     console.log("render", this.state);
     return (
-        <div class="vertical-flex">
+        <div className="vertical-flex">
                   <Link to={{pathname: `/view/` }} style={{position:"absolute", top:2, left: 4}}><button>Terug</button></Link>
         {data.length > 0 
         ?
           <div>
-            <h4 class="vraagnaam">{data[0].user ? (data[0].user.length ? data[0].user[0].name : "Onbekende") : "Onbekend"}</h4>
-            <h2 class="vraagtitel">Vraag {data[0].question}: {this.state.questionText} </h2>
+            <h4 className="vraagnaam">{data[0].user ? (data[0].user.length ? data[0].user[0].name : "Onbekende") : "Onbekend"}</h4>
+            <h2 className="vraagtitel">Vraag {data[0].question}: {this.state.questionText} </h2>
                 {data[0].answers.map((value, index) => (
-                  <Card class={`answer-card ${this.state.class[index]}`} key={index} style={{fontSize:25, backgroundColor:"rgba(255,255,255,0.7)", backdropFilter:"blur(10px)"}} onClick={() => this.viewCard(index)}>
-                    <img src="/img/star.png" class="star" alt="star"></img>
+                  <Card className={`answer-card ${this.state.class[index]}`} key={index} style={{fontSize:25, backgroundColor:"rgba(255,255,255,0.7)", backdropFilter:"blur(10px)"}} onClick={() => this.viewCard(index)}>
+                    <img src="/img/star.png" className="star" alt="star"></img>
                     <span>{index+1}. </span>
                     <b>{value.player}</b>
                     <p style={{margin:0, fontSize:20}}>{value.comment}</p>
