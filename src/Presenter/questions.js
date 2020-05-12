@@ -72,6 +72,7 @@ export default class PresenterQuestions extends Component {
       cquestion: question,
       cplayer: player
     });
+    this.props.history.push('/view/question/'+question);
     // console.log(question, player);
   }
 

@@ -33,6 +33,7 @@ ReactDOM.render(
                 <Route path="/view">
                     <div style={{backgroundImage:"url(/img/smallbg.png)", backgroundSize:"cover", backgroundPosition:"50% 50%", width:"100vw", height:"100vh", overflow:"auto", padding:"5px 10%"}}>
                         <Route path="/view/question/:question/player/:player" component={PresenterAnswers} />
+                        <Route exact path="/view/question/:question" component={PresenterQuestions} />
                         <Route exact path="/view" component={PresenterQuestions} />
                     </div>
                 </Route>
