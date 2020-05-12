@@ -1,18 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
-import Question from './../Admin/question';
-import Answers from './../Admin/answers';
-import Menu from './../Admin/Menu';
-
 // import style
 import '../App/css/style.css';
 
 import { Link } from 'react-router-dom';
 import {List,ListItem} from 'material-ui/List';
-import Subheader from 'material-ui/Subheader';
-import Divider from 'material-ui/Divider';
-import RaisedButton from 'material-ui/RaisedButton';
 
 export default class PresenterQuestions extends Component {
   constructor(props) {
@@ -42,7 +35,7 @@ export default class PresenterQuestions extends Component {
       axios.get(process.env.REACT_APP_API_URL+'/admin/all')
       .then(res => {
         var newData = [];
-        Object.values(res.data).map((value, index) => { 
+        Object.values(res.data).forEach((value, index) => { 
           if(!newData[value.question]) {
             newData[value.question] = [];
           }
@@ -84,7 +77,7 @@ export default class PresenterQuestions extends Component {
 
   render() {
     const lItems = [];
-    var { cquestion, cplayer,stateMachine } = this.state;
+    var { stateMachine } = this.state;
     let questions = this.state.questionData;
     for (let nr in questions) {
       console.log(questions[nr]);

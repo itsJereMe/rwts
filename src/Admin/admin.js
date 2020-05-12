@@ -11,7 +11,6 @@ import '../App/css/style.css';
 import {List,ListItem} from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import Divider from 'material-ui/Divider';
-import RaisedButton from 'material-ui/RaisedButton';
 
 export default class Admin extends Component {
   constructor(props) {

@@ -4,6 +4,8 @@
 
 //first we import our dependencies…
 var express = require('express');
+const path = require('path');
+const fs = require("fs");
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var Comment = require('./model/comments');
@@ -17,7 +19,7 @@ var router = express.Router();
 
 //set our port to either a predetermined port number if you have set 
 //it up, or 3001
-var port = process.env.API_PORT || 81;
+var port = process.env.API_PORT || 80;
 
 var env = process.env;
 //db config
@@ -43,11 +45,6 @@ app.use(function(req, res, next) {
     //and remove cacheing so we get the most recent comments
     res.setHeader('Cache-Control', 'no-cache');
     next();
-});
-
-//now we can set the route path & initialize the API
-router.get('/', function(req, res) {
-    res.json({ message: 'API Initialized!'});
 });
 
 //adding the /comments route to our /api router
@@ -312,6 +309,11 @@ router.route('/comments/:comment_id')
 
 //Use our router configuration when we call /api
 app.use('/api', router);
+app.use('/static', express.static(__dirname + '/build/static'));
+app.use('/img', express.static(__dirname + '/build/img'));
+app.use(function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  })
 
 //starts the server and listens for requests
 app.listen(port, function() {

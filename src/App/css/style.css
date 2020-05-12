@@ -303,7 +303,7 @@ span.badge {
 }
 
 .vertical-flex div {
-  width:-webkit-fill-available;
+  width:stretch;
 }
 
 .vraagtitel, .vraagnaam {

@@ -5,14 +5,6 @@ import axios from 'axios';
 import '../App/css/style.css';
 
 import { Link } from 'react-router-dom';
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn,
-} from 'material-ui/Table';
 import {Card} from 'material-ui/Card';
 
 
@@ -63,11 +55,13 @@ export default class Answers extends Component {
             return axios.get(`${process.env.REACT_APP_API_URL}/admin/${question}/${player}`);
           })
           .then(res => {
-            res.data[0].answers.map((value, index) => {
-              this.state.class[index]="invisible";
+            var tempClass= this.state.class;
+            res.data[0].answers.forEach((value, index) => {
+              tempClass[index]="invisible";
             });
-            this.setState({ data: res.data, firstLoad:false});
-             console.log("update", res.data)
+            this.setState({ data: res.data, firstLoad:false, class: tempClass});
+            console.log("update", res.data)
+            return true;
           })
           .catch(err => {
             console.log(err);
@@ -98,7 +92,7 @@ export default class Answers extends Component {
             <h2 class="vraagtitel">Vraag {data[0].question}: {this.state.questionText} </h2>
                 {data[0].answers.map((value, index) => (
                   <Card class={`answer-card ${this.state.class[index]}`} key={index} style={{fontSize:25, backgroundColor:"rgba(255,255,255,0.7)", backdropFilter:"blur(10px)"}} onClick={() => this.viewCard(index)}>
-                    <img src="/img/star.png" class="star"></img>
+                    <img src="/img/star.png" class="star" alt="star"></img>
                     <span>{index+1}. </span>
                     <b>{value.player}</b>
                     <p style={{margin:0, fontSize:20}}>{value.comment}</p>
