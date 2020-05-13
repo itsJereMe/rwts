@@ -322,12 +322,12 @@ http.createServer(app).listen(port, function() {
     console.log(`api running on port ${port}`);
 });
 
-var options = {
-    key: env.KEY_PATH,
-    cert: env.CERT_PATH,
-    ca: env.CA_PATH
-  };
+/* var options = {
+    key: fs.readFileSync(env.KEY_PATH),
+    cert: fs.readFileSync(env.CERT_PATH),
+    ca: fs.readFileSync(env.CA_PATH)
+  }; */
 
-https.createServer(options, app).listen(443, function() {
+/* https.createServer(options, app).listen(443, function() {
     console.log(`api running on port 443`);
-});
+}); */
