@@ -4,7 +4,6 @@ import axios from 'axios';
 // import style
 import '../App/css/style.css';
 
-import { Link } from 'react-router-dom';
 import {List,ListItem} from 'material-ui/List';
 
 export default class PresenterQuestions extends Component {
