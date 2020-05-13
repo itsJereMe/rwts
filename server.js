@@ -6,6 +6,8 @@
 var express = require('express');
 const path = require('path');
 const fs = require("fs");
+const http = require('http');
+const https = require('https');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 var Comment = require('./model/comments');
@@ -316,6 +318,16 @@ app.use(function (req, res) {
   })
 
 //starts the server and listens for requests
-app.listen(port, function() {
+http.createServer(app).listen(port, function() {
     console.log(`api running on port ${port}`);
+});
+
+var options = {
+    key: env.KEY_PATH,
+    cert: env.CERT_PATH,
+    ca: env.CA_PATH
+  };
+
+https.createServer(options, app).listen(443, function() {
+    console.log(`api running on port 443`);
 });
