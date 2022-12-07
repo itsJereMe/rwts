@@ -7,7 +7,7 @@
     "axios": "^0.18.1",
     "body-parser": "^1.18.2",
     "dotenv": "^5.0.1",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "foreman": "^3.0.1",
     "jquery": "^3.5.0",
     "marked": "^1.0.0",
