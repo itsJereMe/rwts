@@ -20,7 +20,7 @@
     "react-materialize": "^1.1.2",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "^3.4.1",
+    "react-scripts": "^5.0.1",
     "react-sortable-hoc": "^0.6.8",
     "react-user-avatar": "^1.10.0",
     "redux": "^3.7.2",
